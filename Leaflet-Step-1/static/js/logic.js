@@ -3,7 +3,6 @@
 // We set the longitude, latitude, and the starting zoom level for sf
 // This gets inserted into the div with an id of 'map' in index.html
 
-// var API_KEY = "pk.eyJ1IjoianVsaWFjb29wZXI2MCIsImEiOiJjbDc1eG5lN3cwYWljM3dscWdqcHNtbmV2In0.ItVjV-79CarwaxVm0B0AmA";
 
 var lightmap  = L.tileLayer("https://api.mapbox.com/styles/v1/mapbox/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}", {
     attribution: "Map data &copy; <a href=\"https://www.openstreetmap.org/\">OpenStreetMap</a> contributors, <a href=\"https://creativecommons.org/licenses/by-sa/2.0/\">CC-BY-SA</a>, Imagery © <a href=\"https://www.mapbox.com/\">Mapbox</a>",
