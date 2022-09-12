@@ -3,9 +3,9 @@
 // We set the longitude, latitude, and the starting zoom level for sf
 // This gets inserted into the div with an id of 'map' in index.html
 
-var API_KEY = "pk.eyJ1IjoianVsaWFjb29wZXI2MCIsImEiOiJjbDc1eG5lN3cwYWljM3dscWdqcHNtbmV2In0.ItVjV-79CarwaxVm0B0AmA";
+// var API_KEY = "pk.eyJ1IjoianVsaWFjb29wZXI2MCIsImEiOiJjbDc1eG5lN3cwYWljM3dscWdqcHNtbmV2In0.ItVjV-79CarwaxVm0B0AmA";
 
-var graymap = L.tileLayer("https://api.mapbox.com/styles/v1/mapbox/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}", {
+var lightmap  = L.tileLayer("https://api.mapbox.com/styles/v1/mapbox/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}", {
     attribution: "Map data &copy; <a href=\"https://www.openstreetmap.org/\">OpenStreetMap</a> contributors, <a href=\"https://creativecommons.org/licenses/by-sa/2.0/\">CC-BY-SA</a>, Imagery © <a href=\"https://www.mapbox.com/\">Mapbox</a>",
     maxZoom: 18,
     id: "light-v10",
@@ -17,16 +17,19 @@ var graymap = L.tileLayer("https://api.mapbox.com/styles/v1/mapbox/{id}/tiles/{z
 var myMap = L.map("map", {
   center: [34.0522, -118.2437],
   zoom: 5,
-  layers: [graymap]
+  layers: [lightmap],
 });
-
+var earthquakes = new L.layerGroup();
+var overlays = {
+  Earthquakes: earthquakes
+}
 
   // Add our 'graymap' tile layer to the map
-graymap.addTo(myMap);
+  lightmap .addTo(myMap);
   
   
   // Create a control for our layers, add our overlay layers to it
-  L.control.layers(null, overlays).addTo(map);
+  L.control.layers(null, overlays).addTo(myMap);
   
   // Create a legend to display information about our map
   var info = L.control({
@@ -39,7 +42,7 @@ graymap.addTo(myMap);
     return div;
   };
   // Add the info legend to the map
-  info.addTo(map);
+  info.addTo(myMap);
   
 
 
@@ -50,7 +53,7 @@ d3.json("https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_week.geoj
     return {
       opacity: 1,
       fillOpacity: 1,
-      fillColor: mapColor(feature.properties.mag),
+      fillColor: getColor(feature.properties.mag),
       color: "#000000",
       radius: getRadius(feature.properties.mag),
       stroke: true,
@@ -99,7 +102,7 @@ L.geoJson(data,{
     style: styleInfo,
 
      // Create a popup for each marker to display the magnitude and location of the earthquake after the marker has been created and styled
-     
+
     onEachFeature: function(feature, layer) {
         layer.bindPopup("Magnitude: " + feature.properties.mag + "<br>Location: " + feature.properties.place);
       }
